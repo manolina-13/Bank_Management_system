@@ -2,7 +2,13 @@
 
 ## Description
 
-The developed web application, "Simple Bank," provides core banking functionalities for three distinct user roles: Customers, Staff, and Managers. Each role interacts with a dedicated web portal tailored to their specific tasks. The project emphasizes the use of **Java Servlets** for server-side logic and request handling. **JavaServer Pages (JSP)** along with **JSTL (JSP Standard Tag Library)** and **Expression Language (EL)** are employed for dynamically generating HTML views presented to the user. Data persistence is achieved using **JDBC (Java Database Connectivity)** to interact with an **SQLite** database, which stores all application data including user accounts, transactions, loans, fixed deposits, and grievances. The application is deployed and runs on an **Apache Tomcat** server, which serves as the servlet container. Password hashing for security is implemented using SHA-256.
+The Simple Bank web application provides core banking functionalities for three distinct user roles: Customers, Staff, and Managers. Each role interacts with a dedicated web portal tailored to their specific tasks.
+
+The project emphasizes the use of **Java Servlets** for server-side logic and request handling. **JavaServer Pages (JSP)**, along with **JSTL (JSP Standard Tag Library)** and **Expression Language (EL)**, are employed for dynamically generating HTML views presented to the user.
+
+Data persistence is achieved using **JDBC (Java Database Connectivity)** to interact with an **SQLite** database, which stores all application data including user accounts, transactions, loans, fixed deposits, and grievances.
+
+The application is deployed and runs on an **Apache Tomcat** server, which serves as the servlet container. Password hashing for security is implemented using SHA-256.
 
 ## Application Functionality
 
@@ -46,20 +52,34 @@ The application's features are segregated based on user roles:
 ## Source Code Structure and Packages
 
 The Java source code (located in the `src` directory) is organized into packages to promote a modular and maintainable structure, loosely following a Model-View-Controller (MVC) pattern adapted for a Servlet-based application.
+
 The web application's entry point is configured in `web.xml`, which maps URL patterns (e.g., `/customer/*`, `/staff/*`, `/manager/*`) to specific Router Servlets. These Routers then delegate requests to handler classes or methods based on the specific path.
 
 The primary packages are:
 
-*   **db (`db.CustomerDB`, `db.ManagerDB`, `db.StaffDB`, `db.DatabaseUtil`):** This package is central to data persistence. `DatabaseUtil.java` provides a utility for establishing JDBC connections to the SQLite database (`simple_bank.db`) and for quietly closing resources. `CustomerDB.java`, `ManagerDB.java`, and `StaffDB.java` contain static methods that encapsulate all database operations (CRUD - Create, Read, Update, Delete) specific to their respective user roles or entities. This includes operations for customer accounts, staff accounts, transactions, loans, FDs, and grievances. These classes use JDBC `PreparedStatement` for executing SQL queries.
+*   **db:** (`db.CustomerDB`, `db.ManagerDB`, `db.StaffDB`, `db.DatabaseUtil`)
+    *   This package is central to data persistence.
+    *   `DatabaseUtil.java` provides a utility for establishing JDBC connections to the SQLite database (`simple_bank.db`) and for quietly closing resources.
+    *   `CustomerDB.java`, `ManagerDB.java`, and `StaffDB.java` contain static methods that encapsulate all database operations (CRUD - Create, Read, Update, Delete) specific to their respective user roles or entities. This includes operations for customer accounts, staff accounts, transactions, loans, FDs, and grievances.
+    *   These classes use JDBC `PreparedStatement` for executing SQL queries.
 
-*   **model (`model.Customer`, `model.Staff`, `model.Transaction`, etc.):** This package comprises Plain Old Java Objects (POJOs) representing the application's data entities (e.g., `Customer`, `Loan`, `FD`, `Grievance`, `PartialSignup`, `Staff`, `Transaction`). These model classes have private fields and public getter methods. They are used to transfer data between the database layer, servlet layer, and the JSP view layer. JSPs access data from these model objects using Expression Language (EL).
+*   **model:** (`model.Customer`, `model.Staff`, `model.Transaction`, etc.)
+    *   This package comprises Plain Old Java Objects (POJOs) representing the application's data entities (e.g., `Customer`, `Loan`, `FD`, `Grievance`, `PartialSignup`, `Staff`, `Transaction`).
+    *   These model classes have private fields and public getter methods.
+    *   They are used to transfer data between the database layer, servlet layer, and the JSP view layer. JSPs access data from these model objects using Expression Language (EL).
 
-*   **servlet (`servlet.customer.*`, `servlet.manager.*`, `servlet.staff.*`):** This package contains all the servlet classes, organized into sub-packages for each user portal.
+*   **servlet:** (`servlet.customer.*`, `servlet.manager.*`, `servlet.staff.*`)
+    *   This package contains all the servlet classes, organized into sub-packages for each user portal.
 
-    *   Each sub-package (e.g., `servlet.customer`) has a main Router Servlet (e.g., `CustomerRouter.java`) that extends `HttpServlet`. This Router Servlet intercepts requests based on URL patterns defined in `web.xml` (e.g., `/customer/*`).
+    *   Each sub-package (e.g., `servlet.customer`) has a main Router Servlet (e.g., `CustomerRouter.java`) that extends `HttpServlet`.
+        *   This Router Servlet intercepts requests based on URL patterns defined in `web.xml` (e.g., `/customer/*`).
 
     *   The Router Servlet then dispatches the request to static `handle(request, response)` methods within specific "handler" classes (e.g., `LoginServlet.java`, `DashboardServlet.java`, `CustomerFDServlet.java`) based on the request's sub-path (`request.getPathInfo()`).
 
-    *   These handler methods perform authentication checks (verifying session attributes), retrieve or process data by calling methods in the `db` package, set request attributes with data to be displayed, and finally forward the request to the appropriate JSP page (located in `WEB-INF/pages/...`) for rendering the HTML response.
+    *   These handler methods:
+        *   Perform authentication checks (verifying session attributes).
+        *   Retrieve or process data by calling methods in the `db` package.
+        *   Set request attributes with data to be displayed.
+        *   Finally, forward the request to the appropriate JSP page (located in `WEB-INF/pages/...`) for rendering the HTML response.
 
 The web content, including JSP files, CSS, and any images, is organized under the `simple-bank` web application directory, with JSPs in `WEB-INF/pages`.
