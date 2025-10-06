@@ -1,0 +1,1 @@
+compile.bat && copy.bat && restart.bat
