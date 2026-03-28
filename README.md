@@ -50,7 +50,7 @@ The application's features are segregated based on user roles:
 *   Logout.
 
 ## Use Case Diagram 
-![Use Case Diagram](use case_1(1).png)
+![Use Case Diagram](use_case.png)
 
 
 ## Source Code Structure and Packages
