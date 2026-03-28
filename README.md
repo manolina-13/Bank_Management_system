@@ -49,6 +49,10 @@ The application's features are segregated based on user roles:
 *   Change personal password.
 *   Logout.
 
+## Use Case Diagram 
+![Use Case Diagram](use_case1(1).png)
+
+
 ## Source Code Structure and Packages
 
 The Java source code (located in the `src` directory) is organized into packages to promote a modular and maintainable structure, loosely following a Model-View-Controller (MVC) pattern adapted for a Servlet-based application.
